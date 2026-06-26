@@ -16,7 +16,7 @@ once from this repo; after that, updates are a single command.
 Clone the repo, then run the installer:
 
 ```bash
-git clone <REPO_URL> ptlauncher
+git clone https://github.com/beno-hallow/PTLauncher.git ptlauncher
 cd ptlauncher
 chmod +x build.sh update.sh
 ./update.sh
