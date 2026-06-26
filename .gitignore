@@ -1,0 +1,7 @@
+# Build artifacts — everyone builds locally
+PTLauncher
+PTLauncher.app/
+
+# Signing scratch
+*.p12
+*.pem
