@@ -40,12 +40,31 @@ Your buttons and layout are kept across updates.
 ## Customizing your buttons
 
 - The **⚙ / Add** button (end of the strip) → add an application, a Pro Tools
-  action, a keystroke, or a custom script; toggle number hotkeys.
-- **Right-click** any button to change its icon, edit its script, or remove it.
+  action, a keystroke, or a custom script.
+- **Right-click** any button to change its icon, edit its script, set a keyboard
+  shortcut, or remove it.
 - **Drag** buttons to reorder them.
 
 Your layout lives in `~/Library/Application Support/PTLauncher/config.json` and
 is never touched by updates.
+
+## Keyboard shortcuts
+
+Turn them on with **⚙ / Add → Keyboard Shortcuts (1–9 + custom)**. They fire only
+while Pro Tools is the active app, and they override Pro Tools' own shortcut for
+that key.
+
+- **Number keys:** the first nine buttons map to **⌥1–⌥9** (Option + the number).
+  The modifier matters: Pro Tools' transport and nudge fields are invisible to
+  macOS accessibility, so a *bare* number couldn't tell "type 3 into the counter"
+  apart from "fire button 3." Holding Option avoids that entirely. You can change
+  the modifier (or pick None, at your own risk) under **⚙ → Number Key Modifier**.
+- **Custom shortcuts:** right-click any button → **Set Shortcut…** and press the
+  combo you want (e.g. ⌘⌥H). It overrides the positional number for that button.
+  **Clear Shortcut** removes it. Each button shows its shortcut as a small badge.
+
+Setting a shortcut requires granting PT Launcher **Accessibility** permission
+(System Settings → Privacy & Security → Accessibility) the first time.
 
 ## Troubleshooting
 

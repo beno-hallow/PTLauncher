@@ -17,58 +17,114 @@ private func eventTapCallback(
 
 // MARK: - Icon library
 
+// Names that aren't available on the running macOS just render blank (configure()
+// guards with `if let img`), so it's safe to include newer symbols.
 let symbolLibrary: [(category: String, symbols: [String])] = [
     ("Audio", [
-        "waveform", "waveform.path.ecg", "waveform.badge.plus", "waveform.badge.mic",
-        "headphones", "headphones.circle", "mic", "mic.fill", "mic.slash",
-        "speaker.wave.1", "speaker.wave.2", "speaker.wave.3", "speaker.slash",
-        "music.note", "music.quarternote.3", "music.note.list", "music.mic",
-        "dial.min", "dial.max", "metronome", "metronome.fill",
-        "guitars", "guitars.fill", "piano.fill",
+        "waveform", "waveform.circle", "waveform.circle.fill", "waveform.path",
+        "waveform.path.ecg", "waveform.path.ecg.rectangle",
+        "waveform.path.badge.plus", "waveform.path.badge.minus",
+        "waveform.badge.plus", "waveform.badge.minus", "waveform.badge.mic",
+        "dot.radiowaves.left.and.right", "dot.radiowaves.right",
+        "antenna.radiowaves.left.and.right",
+        "headphones", "headphones.circle", "headphones.circle.fill",
+        "earpods", "airpods", "airpodspro",
+        "hifispeaker", "hifispeaker.fill", "homepod", "homepod.fill",
+        "mic", "mic.fill", "mic.circle", "mic.circle.fill", "mic.slash", "mic.slash.fill",
+        "speaker", "speaker.fill", "speaker.wave.1", "speaker.wave.2", "speaker.wave.3",
+        "speaker.wave.2.circle", "speaker.slash", "speaker.zzz",
+        "music.note", "music.note.list", "music.note.house", "music.quarternote.3",
+        "music.mic", "metronome", "metronome.fill",
+        "guitars", "guitars.fill", "pianokeys", "ear", "ear.fill", "amplifier",
     ]),
     ("Transport", [
-        "play.fill", "play.circle", "play.circle.fill",
-        "pause.fill", "pause.circle",
-        "stop.fill", "stop.circle",
+        "play", "play.fill", "play.circle", "play.circle.fill", "play.rectangle.fill",
+        "pause", "pause.fill", "pause.circle", "pause.circle.fill",
+        "playpause", "playpause.fill",
+        "stop", "stop.fill", "stop.circle", "stop.circle.fill",
         "record.circle", "record.circle.fill",
-        "forward.fill", "backward.fill",
-        "forward.end.fill", "backward.end.fill",
+        "forward", "forward.fill", "backward", "backward.fill",
+        "forward.end.fill", "backward.end.fill", "forward.frame.fill", "backward.frame.fill",
+        "gobackward", "goforward", "gobackward.10", "goforward.10",
         "repeat", "repeat.1", "shuffle", "infinity",
+        "timer", "stopwatch", "stopwatch.fill", "speedometer",
     ]),
     ("Edit", [
-        "scissors", "scissors.badge.ellipsis",
+        "scissors", "scissors.circle", "scissors.badge.ellipsis",
+        "lasso", "crop", "crop.rotate", "selection.pin.in.out",
         "arrow.uturn.backward", "arrow.uturn.forward",
+        "arrow.uturn.left.circle", "arrow.uturn.right.circle",
         "arrow.clockwise", "arrow.counterclockwise",
         "doc.on.doc", "doc.on.clipboard",
-        "pencil", "pencil.circle",
-        "trash", "trash.circle",
-        "checkmark.circle", "xmark.circle",
-        "plus.circle", "minus.circle",
+        "pencil", "pencil.circle", "pencil.tip", "pencil.and.outline",
+        "square.and.pencil", "highlighter",
+        "trash", "trash.circle", "trash.fill",
+        "delete.left", "delete.right",
+        "checkmark", "checkmark.circle", "checkmark.seal",
+        "xmark", "xmark.circle", "xmark.seal",
+        "plus", "plus.circle", "minus", "minus.circle", "plusminus",
     ]),
     ("Tools", [
-        "applescript", "applescript.fill",
-        "terminal", "terminal.fill",
-        "command", "command.circle",
-        "gear", "gear.circle",
+        "applescript", "applescript.fill", "terminal", "terminal.fill",
+        "command", "command.circle", "command.square", "option", "control",
+        "gear", "gearshape", "gearshape.fill", "gearshape.2",
+        "slider.horizontal.3", "slider.horizontal.below.rectangle", "switch.2",
+        "dial.min", "dial.max", "dial.low", "dial.medium", "dial.high",
         "wrench.and.screwdriver", "wrench.and.screwdriver.fill",
-        "bolt", "bolt.fill", "bolt.circle",
-        "wand.and.stars", "wand.and.rays", "sparkles",
+        "hammer", "hammer.fill", "screwdriver", "wrench.adjustable",
+        "bolt", "bolt.fill", "bolt.circle", "bolt.horizontal",
+        "cpu", "memorychip", "gauge", "ruler", "level",
+        "paintbrush", "paintbrush.pointed", "eyedropper",
+        "lightbulb", "lightbulb.fill", "flame", "flame.fill",
+        "wand.and.stars", "wand.and.rays", "sparkle", "sparkles", "powerplug",
     ]),
     ("Files", [
-        "folder", "folder.fill", "folder.badge.plus",
-        "doc", "doc.fill", "doc.text",
-        "tray", "tray.fill", "archivebox",
-        "externaldrive", "internaldrive", "icloud",
+        "folder", "folder.fill", "folder.circle", "folder.badge.plus", "folder.badge.gearshape",
+        "doc", "doc.fill", "doc.text", "doc.text.fill", "doc.richtext", "doc.badge.plus",
+        "square.and.arrow.up", "square.and.arrow.down",
+        "tray", "tray.fill", "tray.full", "tray.and.arrow.down", "tray.and.arrow.up",
+        "archivebox", "archivebox.fill", "shippingbox",
+        "externaldrive", "externaldrive.fill", "internaldrive", "opticaldiscdrive",
+        "server.rack", "icloud", "icloud.fill", "icloud.and.arrow.up", "icloud.and.arrow.down",
+    ]),
+    ("Arrows", [
+        "arrow.right", "arrow.left", "arrow.up", "arrow.down",
+        "arrow.right.circle", "arrow.left.circle", "arrow.up.circle", "arrow.down.circle",
+        "arrow.up.arrow.down", "arrow.left.arrow.right",
+        "arrow.up.right", "arrow.down.right", "arrow.up.left", "arrow.down.left",
+        "arrow.triangle.2.circlepath", "arrow.clockwise.circle", "arrow.counterclockwise.circle",
+        "arrow.uturn.up", "arrow.uturn.down",
+        "arrowshape.turn.up.right", "arrowshape.turn.up.left",
+        "chevron.right", "chevron.left", "chevron.up", "chevron.down",
+        "chevron.right.circle", "chevron.up.circle",
+    ]),
+    ("Shapes", [
+        "circle", "circle.fill", "square", "square.fill",
+        "triangle", "triangle.fill", "diamond", "diamond.fill",
+        "hexagon", "hexagon.fill", "octagon", "octagon.fill",
+        "seal", "seal.fill", "rhombus", "rhombus.fill", "capsule", "oval",
+        "app", "app.fill", "rectangle", "rectangle.fill",
+        "square.grid.2x2", "square.grid.3x3", "circle.grid.2x2",
     ]),
     ("Misc", [
-        "star", "star.fill", "star.circle",
-        "heart", "heart.fill",
-        "flag", "flag.fill", "flag.circle",
-        "bookmark", "bookmark.fill",
-        "tag", "tag.fill",
-        "bell", "bell.fill", "bell.slash",
-        "eye", "eye.slash",
-        "hand.thumbsup", "hand.thumbsup.fill",
+        "star", "star.fill", "star.circle", "star.circle.fill",
+        "heart", "heart.fill", "heart.circle", "bolt.heart",
+        "flag", "flag.fill", "flag.circle", "flag.checkered",
+        "bookmark", "bookmark.fill", "bookmark.circle",
+        "tag", "tag.fill", "tag.circle",
+        "pin", "pin.fill", "mappin", "mappin.circle",
+        "bell", "bell.fill", "bell.slash", "bell.badge", "bell.circle",
+        "eye", "eye.fill", "eye.slash", "eye.circle",
+        "hand.thumbsup", "hand.thumbsup.fill", "hand.thumbsdown", "hand.thumbsdown.fill",
+        "hand.raised", "hand.raised.fill", "hand.point.up.left",
+        "person", "person.fill", "person.circle",
+        "clock", "clock.fill", "calendar", "calendar.badge.clock",
+        "lock", "lock.fill", "lock.open", "key", "key.fill",
+        "wifi", "globe", "globe.americas",
+        "moon", "moon.fill", "sun.max", "sun.max.fill", "cloud", "cloud.fill",
+        "paperplane", "paperplane.fill", "envelope", "envelope.fill",
+        "questionmark.circle", "exclamationmark.triangle", "info.circle",
+        "number", "textformat", "character",
     ]),
 ]
 
@@ -117,6 +173,9 @@ struct LauncherButton: Codable {
     var appPath: String?        // .app
     var scriptPath: String?     // .script — absolute path to .applescript file
     var symbol: String?
+    // Optional custom global shortcut (overrides the positional 1-9 key).
+    var shortcutKeyCode: Int?
+    var shortcutModifiers: [String]?   // any of: command, option, control, shift
     // Legacy fields kept for migration only:
     var menuPath: [String]?
     var key: String?
@@ -132,8 +191,13 @@ struct Config: Codable {
     var targetApp: String
     var followApp: String?
     var buttons: [LauncherButton]
+    // Modifier required for the positional 1-9 shortcuts: none/command/option/control/shift.
+    // Default "option" — Pro Tools' transport/nudge fields are invisible to accessibility,
+    // so bare number keys can't be made safe; a modifier avoids the collision.
+    var numberHotkeyModifier: String? = nil
 
     var resolvedPadding: CGFloat { CGFloat(padding ?? 8) }
+    var resolvedNumberModifier: String { (numberHotkeyModifier ?? "option").lowercased() }
 
     static func makeDefault() -> Config {
         Config(
@@ -566,17 +630,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             }
             strip.addSubview(btn)
 
-            if hotkeysEnabled && i < 9 {
-                let label = NSTextField(labelWithString: "\(i + 1)")
-                label.font = NSFont.monospacedDigitSystemFont(ofSize: 9, weight: .bold)
-                label.textColor = NSColor.white.withAlphaComponent(0.85)
-                label.isEditable = false
-                label.drawsBackground = false
-                label.isBordered = false
-                label.sizeToFit()
-                label.frame = NSRect(x: btnX + 3, y: pad + size - label.frame.height - 2,
-                                     width: label.frame.width, height: label.frame.height)
-                strip.addSubview(label)
+            if hotkeysEnabled {
+                // Show the custom shortcut if assigned, otherwise the positional 1-9
+                // prefixed with the required modifier symbol.
+                var badge: String? = shortcutDisplay(for: b)
+                if badge == nil && i < 9 { badge = numberModifierSymbol() + "\(i + 1)" }
+                if let text = badge {
+                    let label = NSTextField(labelWithString: text)
+                    label.font = NSFont.monospacedDigitSystemFont(ofSize: 9, weight: .bold)
+                    label.textColor = NSColor.white.withAlphaComponent(0.85)
+                    label.isEditable = false
+                    label.drawsBackground = false
+                    label.isBordered = false
+                    label.sizeToFit()
+                    label.frame = NSRect(x: btnX + 3, y: pad + size - label.frame.height - 2,
+                                         width: label.frame.width, height: label.frame.height)
+                    strip.addSubview(label)
+                }
             }
         }
 
@@ -607,7 +677,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         btn.imagePosition = .imageOnly
         btn.imageScaling = .scaleProportionallyUpOrDown
         btn.title = ""
-        btn.toolTip = model.title
+        if let sc = shortcutDisplay(for: model) {
+            btn.toolTip = "\(model.title)  (\(sc))"
+        } else {
+            btn.toolTip = model.title
+        }
         btn.tag = index
         btn.target = self
         btn.action = #selector(buttonTapped(_:))
@@ -634,6 +708,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let changeIcon = NSMenuItem(title: "Change Icon\u{2026}", action: #selector(changeIcon(_:)), keyEquivalent: "")
         changeIcon.target = self; changeIcon.tag = index
         menu.addItem(changeIcon)
+
+        let scTitle = shortcutDisplay(for: model).map { "Set Shortcut\u{2026} (now \($0))" } ?? "Set Shortcut\u{2026}"
+        let setSC = NSMenuItem(title: scTitle, action: #selector(setShortcut(_:)), keyEquivalent: "")
+        setSC.target = self; setSC.tag = index
+        menu.addItem(setSC)
+        if model.shortcutKeyCode != nil {
+            let clearSC = NSMenuItem(title: "Clear Shortcut", action: #selector(clearShortcut(_:)), keyEquivalent: "")
+            clearSC.target = self; clearSC.tag = index
+            menu.addItem(clearSC)
+        }
+
         menu.addItem(.separator())
         let remove = NSMenuItem(title: "Remove \u{201C}\(model.title)\u{201D}", action: #selector(removeButton(_:)), keyEquivalent: "")
         remove.target = self; remove.tag = index
@@ -742,10 +827,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         menu.addItem(.separator())
 
-        let hotkeys = NSMenuItem(title: "Number Hotkeys (1\u{2013}9)", action: #selector(toggleHotkeys), keyEquivalent: "")
+        let hotkeys = NSMenuItem(title: "Keyboard Shortcuts (1\u{2013}9 + custom)", action: #selector(toggleHotkeys), keyEquivalent: "")
         hotkeys.target = self
         hotkeys.state = hotkeysEnabled ? .on : .off
         menu.addItem(hotkeys)
+
+        // Submenu: which modifier the positional 1-9 keys require.
+        let modItem = NSMenuItem(title: "Number Key Modifier", action: nil, keyEquivalent: "")
+        let modMenu = NSMenu()
+        let current = config.resolvedNumberModifier
+        for (label, value) in [("\u{2325} Option (recommended)", "option"),
+                               ("\u{2318} Command", "command"),
+                               ("\u{2303} Control", "control"),
+                               ("\u{21E7} Shift", "shift"),
+                               ("None (bare 1\u{2013}9 \u{2014} unsafe in Pro Tools)", "none")] {
+            let mi = NSMenuItem(title: label, action: #selector(setNumberModifier(_:)), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = value
+            mi.state = (current == value) ? .on : .off
+            modMenu.addItem(mi)
+        }
+        modItem.submenu = modMenu
+        menu.addItem(modItem)
 
         menu.addItem(.separator())
 
@@ -841,7 +944,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func showIconPicker(current: String, completion: @escaping (String) -> Void) {
         let cellSize: CGFloat = 44
         let cols = 10
+        // Only show symbols that actually render on this macOS version.
         let allSymbols = symbolLibrary.flatMap { $0.symbols }
+            .filter { NSImage(systemSymbolName: $0, accessibilityDescription: nil) != nil }
         let rows = Int(ceil(Double(allSymbols.count) / Double(cols)))
         let gridW = CGFloat(cols) * cellSize
         let gridH = CGFloat(rows) * cellSize
@@ -1031,7 +1136,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             userInfo: Unmanaged.passUnretained(self).toOpaque()
         ) else {
             hotkeysEnabled = false
-            showError("PT Launcher needs Accessibility permission to override number hotkeys.\n\nGo to System Settings \u{2192} Privacy & Security \u{2192} Accessibility and enable PT Launcher, then try again.")
+            showError("PT Launcher needs Accessibility permission to use keyboard shortcuts.\n\nGo to System Settings \u{2192} Privacy & Security \u{2192} Accessibility and enable PT Launcher, then try again.")
             return
         }
         let src = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
@@ -1060,14 +1165,127 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         guard !isFrontAppTextFieldFocused() else { return Unmanaged.passRetained(event) }
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+
+        // Modifiers currently held (ignoring caps lock / fn).
+        let flags = event.flags
+        var modSet = Set<String>()
+        if flags.contains(.maskCommand) { modSet.insert("command") }
+        if flags.contains(.maskAlternate) { modSet.insert("option") }
+        if flags.contains(.maskControl) { modSet.insert("control") }
+        if flags.contains(.maskShift) { modSet.insert("shift") }
+
+        // 1. Custom per-button shortcuts take priority.
+        for b in config.buttons {
+            if let kc = b.shortcutKeyCode, Int64(kc) == keyCode,
+               Set(b.shortcutModifiers ?? []) == modSet {
+                DispatchQueue.main.async { self.run(b) }
+                return nil  // consume — supersedes Pro Tools' shortcut
+            }
+        }
+
+        // 2. Positional number keys 1-9. A required modifier (default Option)
+        //    avoids colliding with typing values into Pro Tools fields, which are
+        //    invisible to accessibility. Only fires for buttons without a custom shortcut.
         // Number key keycodes (US layout): 1=18 2=19 3=20 4=21 5=23 6=22 7=26 8=28 9=25
         let map: [Int64: Int] = [18: 0, 19: 1, 20: 2, 21: 3, 23: 4, 22: 5, 26: 6, 28: 7, 25: 8]
-        guard let idx = map[keyCode], idx < config.buttons.count else {
-            return Unmanaged.passRetained(event)
+        let numMod = config.resolvedNumberModifier
+        let requiredMods: Set<String> = (numMod == "none") ? [] : [numMod]
+        if modSet == requiredMods, let idx = map[keyCode], idx < config.buttons.count,
+           config.buttons[idx].shortcutKeyCode == nil {
+            let button = config.buttons[idx]
+            DispatchQueue.main.async { self.run(button) }
+            return nil  // consume — Pro Tools won't see this keypress
         }
-        let button = config.buttons[idx]
-        DispatchQueue.main.async { self.run(button) }
-        return nil  // consume — Pro Tools won't see this keypress
+
+        return Unmanaged.passRetained(event)
+    }
+
+    // MARK: Shortcut capture / display
+
+    // Maps the small set of key codes we display nicely; everything else shows as "key N".
+    static let keyCodeNames: [Int: String] = [
+        18: "1", 19: "2", 20: "3", 21: "4", 23: "5", 22: "6", 26: "7", 28: "8", 25: "9", 29: "0",
+        0: "A", 11: "B", 8: "C", 2: "D", 14: "E", 3: "F", 5: "G", 4: "H", 34: "I", 38: "J",
+        40: "K", 37: "L", 46: "M", 45: "N", 31: "O", 35: "P", 12: "Q", 15: "R", 1: "S", 17: "T",
+        32: "U", 9: "V", 13: "W", 7: "X", 16: "Y", 6: "Z",
+        49: "Space", 36: "Return", 48: "Tab", 53: "Esc",
+        123: "Left", 124: "Right", 125: "Down", 126: "Up",
+        122: "F1", 120: "F2", 99: "F3", 118: "F4", 96: "F5", 97: "F6", 98: "F7", 100: "F8",
+        101: "F9", 109: "F10", 103: "F11", 111: "F12"
+    ]
+
+    func shortcutDisplay(for b: LauncherButton) -> String? {
+        guard let kc = b.shortcutKeyCode else { return nil }
+        var s = ""
+        let mods = b.shortcutModifiers ?? []
+        if mods.contains("control") { s += "\u{2303}" }   // ⌃
+        if mods.contains("option")  { s += "\u{2325}" }   // ⌥
+        if mods.contains("shift")   { s += "\u{21E7}" }   // ⇧
+        if mods.contains("command") { s += "\u{2318}" }   // ⌘
+        s += AppDelegate.keyCodeNames[kc] ?? "key \(kc)"
+        return s
+    }
+
+    func modifierSymbol(_ name: String) -> String {
+        switch name {
+        case "command": return "\u{2318}"  // ⌘
+        case "option":  return "\u{2325}"  // ⌥
+        case "control": return "\u{2303}"  // ⌃
+        case "shift":   return "\u{21E7}"  // ⇧
+        default:        return ""           // none
+        }
+    }
+
+    func numberModifierSymbol() -> String { modifierSymbol(config.resolvedNumberModifier) }
+
+    @objc func setNumberModifier(_ sender: NSMenuItem) {
+        guard let mod = sender.representedObject as? String else { return }
+        config.numberHotkeyModifier = mod
+        persistAndRebuild()
+    }
+
+    @objc func setShortcut(_ sender: NSMenuItem) {
+        let index = sender.tag
+        guard index >= 0 && index < config.buttons.count else { return }
+        let title = config.buttons[index].title
+
+        let alert = NSAlert()
+        alert.messageText = "Set Shortcut"
+        alert.informativeText = "Press the key combination for \u{201C}\(title)\u{201D}.\nIt fires this button (and overrides Pro Tools) while Pro Tools is active.\n\nPress Esc to cancel."
+        alert.addButton(withTitle: "Cancel")
+
+        var captured: (Int, [String])?
+        let monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { ev in
+            if ev.keyCode == 53 { NSApp.stopModal(); return nil }  // Esc cancels
+            var mods: [String] = []
+            if ev.modifierFlags.contains(.control) { mods.append("control") }
+            if ev.modifierFlags.contains(.option)  { mods.append("option") }
+            if ev.modifierFlags.contains(.shift)   { mods.append("shift") }
+            if ev.modifierFlags.contains(.command) { mods.append("command") }
+            captured = (Int(ev.keyCode), mods)
+            NSApp.stopModal()
+            return nil
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        alert.runModal()
+        if let m = monitor { NSEvent.removeMonitor(m) }
+
+        if let (kc, mods) = captured {
+            config.buttons[index].shortcutKeyCode = kc
+            config.buttons[index].shortcutModifiers = mods
+            persistAndRebuild()
+            if !hotkeysEnabled {
+                showError("Shortcut saved. Turn on \u{201C}Keyboard Shortcuts\u{201D} in the menu to use it.")
+            }
+        }
+    }
+
+    @objc func clearShortcut(_ sender: NSMenuItem) {
+        let index = sender.tag
+        guard index >= 0 && index < config.buttons.count else { return }
+        config.buttons[index].shortcutKeyCode = nil
+        config.buttons[index].shortcutModifiers = nil
+        persistAndRebuild()
     }
 
     func isFrontAppTextFieldFocused() -> Bool {
@@ -1075,11 +1293,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let axApp = AXUIElementCreateApplication(app.processIdentifier)
         var focused: AnyObject?
         guard AXUIElementCopyAttributeValue(axApp, kAXFocusedUIElementAttribute as CFString, &focused) == .success,
-              let element = focused else { return false }
-        var role: AnyObject?
-        AXUIElementCopyAttributeValue(element as! AXUIElement, kAXRoleAttribute as CFString, &role)
-        let r = role as? String ?? ""
-        return r == kAXTextFieldRole || r == kAXTextAreaRole || r == kAXComboBoxRole
+              let elementAny = focused else { return false }
+        let element = elementAny as! AXUIElement
+
+        func attr(_ name: String) -> AnyObject? {
+            var v: AnyObject?
+            return AXUIElementCopyAttributeValue(element, name as CFString, &v) == .success ? v : nil
+        }
+        func has(_ name: String) -> Bool {
+            var v: AnyObject?
+            return AXUIElementCopyAttributeValue(element, name as CFString, &v) == .success
+        }
+
+        // 1. Standard text roles / subroles.
+        let role = attr(kAXRoleAttribute) as? String ?? ""
+        let textRoles: Set<String> = [kAXTextFieldRole as String, kAXTextAreaRole as String,
+                                      kAXComboBoxRole as String, "AXSecureTextField", "AXSearchField"]
+        if textRoles.contains(role) { return true }
+        if let sub = attr(kAXSubroleAttribute) as? String,
+           sub.contains("TextField") || sub.contains("SearchField") || sub.contains("TextInput") {
+            return true
+        }
+
+        // 2. Text-bearing element: exposes a character count or a selection range.
+        //    Catches editable fields (like Pro Tools' transport/nudge counters) that
+        //    don't report a standard text role.
+        if has(kAXNumberOfCharactersAttribute) { return true }
+        if has(kAXSelectedTextRangeAttribute) { return true }
+        if has(kAXSelectedTextAttribute) { return true }
+
+        // 3. Editable element: a focused element whose value is a settable string.
+        var settable: DarwinBoolean = false
+        if AXUIElementIsAttributeSettable(element, kAXValueAttribute as CFString, &settable) == .success,
+           settable.boolValue, attr(kAXValueAttribute) is String {
+            return true
+        }
+
+        return false
     }
 
     // MARK: Drag reorder

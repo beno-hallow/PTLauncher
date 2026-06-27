@@ -26,15 +26,20 @@ tell application "System Events"
         if not windowFound then return
 
         ---------------------------------------------------------
-        -- 3. LOAD "MAX" PRESET
+        -- 3. LOAD THE "Max" PRESET (must exist in Hush)
         ---------------------------------------------------------
         tell window "Audio Suite: Hush Mix"
             click pop up button "Preset"
             delay 0.3
+            try
+                -- Select the preset named exactly "Max"
+                click menu item "Max" of menu 1 of pop up button "Preset"
+            on error
+                key code 53 -- Escape to close the preset menu
+                display dialog "PT Launcher couldn't find a Hush preset named \"Max\"." & return & return & "To use this button: open Hush Mix in Pro Tools, dial in the settings you want as your default, and save them as a preset named exactly \"Max\". After that, this button will load Max and render automatically." buttons {"OK"} default button 1
+                return
+            end try
         end tell
-        keystroke "m"
-        delay 0.2
-        key code 36
         delay 0.3
 
         ---------------------------------------------------------
