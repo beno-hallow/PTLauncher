@@ -17,13 +17,13 @@ VERSION="$(cat VERSION 2>/dev/null || echo '1.0')"
 SPARKLE_DIR="Sparkle"
 FRAMEWORK="$SPARKLE_DIR/Sparkle.framework"
 
-# Where the appcast lives (raw file in this repo) — teammates' apps poll this URL.
+# Where the appcast lives (raw file in this repo) -- teammates' apps poll this URL.
 FEED_URL="https://raw.githubusercontent.com/beno-hallow/PTLauncher/main/appcast.xml"
 
 # Public half of the Sparkle update-signing key (safe to commit). Created by setup-sparkle.sh.
 PUBKEY="$(cat sparkle_pubkey.txt 2>/dev/null || true)"
 
-# Developer ID Application identity. Auto-detected; override with: DEV_ID="Developer ID Application: …" ./build.sh
+# Developer ID Application identity. Auto-detected; override with: DEV_ID="Developer ID Application: ..." ./build.sh
 DEV_ID="${DEV_ID:-$(security find-identity -v -p codesigning 2>/dev/null | awk -F'"' '/Developer ID Application/{print $2; exit}')}"
 
 # --- Preflight ---------------------------------------------------------------
@@ -37,23 +37,31 @@ if [ -z "$PUBKEY" ]; then
 fi
 if [ -z "$DEV_ID" ]; then
   echo "ERROR: No 'Developer ID Application' certificate found in your keychain." >&2
-  echo "       Create one in Xcode → Settings → Accounts → Manage Certificates, then re-run." >&2
+  echo "       Create one in Xcode -> Settings -> Accounts -> Manage Certificates, then re-run." >&2
   exit 1
 fi
 
 # --- Compile -----------------------------------------------------------------
-echo "Compiling PT Launcher v$VERSION…"
+echo "Compiling PT Launcher v$VERSION..."
 xcrun swiftc -O -o "$BIN_NAME" main.swift \
   -framework Cocoa \
   -F "$SPARKLE_DIR" -framework Sparkle \
   -Xlinker -rpath -Xlinker @executable_path/../Frameworks
 
 # --- Assemble bundle ---------------------------------------------------------
-echo "Assembling $APP…"
+echo "Assembling $APP..."
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" "$APP/Contents/Frameworks"
 mv "$BIN_NAME" "$APP/Contents/MacOS/$BIN_NAME"
 cp -R "$FRAMEWORK" "$APP/Contents/Frameworks/"
+
+# Bundle the preloaded scripts. On first launch the app copies these into
+# ~/Library/Application Support/PTLauncher/scripts/ and pre-wires a button for each.
+if [ -d default_scripts ] && ls default_scripts/*.applescript >/dev/null 2>&1; then
+  mkdir -p "$APP/Contents/Resources/scripts"
+  cp default_scripts/*.applescript "$APP/Contents/Resources/scripts/"
+  echo "Bundled $(ls default_scripts/*.applescript | wc -l | tr -d ' ') default script(s)."
+fi
 
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -100,7 +108,7 @@ echo "Signing with: $DEV_ID"
 SPK="$APP/Contents/Frameworks/Sparkle.framework"
 
 # Re-sign Sparkle's nested helpers with your identity, PRESERVING their own
-# entitlements — Downloader.xpc is sandboxed, and stripping its entitlements
+# entitlements -- Downloader.xpc is sandboxed, and stripping its entitlements
 # breaks the update download.
 signnested() { codesign --force --options runtime --timestamp --preserve-metadata=entitlements --sign "$DEV_ID" "$@"; }
 for p in \
@@ -116,8 +124,8 @@ codesign --force --options runtime --timestamp --sign "$DEV_ID" "$SPK"
 codesign --force --options runtime --timestamp --entitlements "$ENT" --sign "$DEV_ID" "$APP"
 rm -f "$ENT"
 
-echo "Verifying…"
-codesign --verify --deep --strict --verbose=2 "$APP" || echo "  (verify reported issues — see above)"
+echo "Verifying..."
+codesign --verify --deep --strict --verbose=2 "$APP" || echo "  (verify reported issues -- see above)"
 
 echo
 echo "Done: $(pwd)/$APP  (v$VERSION)"

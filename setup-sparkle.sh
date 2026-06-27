@@ -2,7 +2,7 @@
 # One-time maintainer setup for Sparkle auto-updates.
 #   1. Downloads the Sparkle framework + tools into ./Sparkle
 #   2. Generates your Ed25519 update-signing key (private key stored in your
-#      login Keychain — it never touches the repo) and writes the PUBLIC key
+#      login Keychain -- it never touches the repo) and writes the PUBLIC key
 #      to sparkle_pubkey.txt (safe to commit).
 #
 # Run this once per maintainer machine. Bump SPARKLE_VERSION if you want a newer
@@ -18,9 +18,9 @@ URL="https://github.com/sparkle-project/Sparkle/releases/download/$SPARKLE_VERSI
 
 # --- 1. Download + extract Sparkle ------------------------------------------
 if [ -d "$SPARKLE_DIR/Sparkle.framework" ]; then
-  echo "Sparkle already present at $SPARKLE_DIR/ — skipping download."
+  echo "Sparkle already present at $SPARKLE_DIR/ -- skipping download."
 else
-  echo "Downloading Sparkle $SPARKLE_VERSION…"
+  echo "Downloading Sparkle $SPARKLE_VERSION..."
   tmp="$(mktemp -d)"
   curl -fsSL "$URL" -o "$tmp/$TARBALL"
   mkdir -p "$SPARKLE_DIR"
@@ -37,18 +37,18 @@ if [ ! -x "$BIN/generate_keys" ]; then
 fi
 
 # --- 2. Generate / read the update-signing key ------------------------------
-echo "Ensuring an Ed25519 update-signing key exists (stored in your Keychain)…"
+echo "Ensuring an Ed25519 update-signing key exists (stored in your Keychain)..."
 # Idempotent: creates the key on first run, no-op afterward. May prompt once for
-# Keychain access — approve it.
+# Keychain access -- approve it.
 "$BIN/generate_keys" >/dev/null 2>&1 || true
 
-echo "Writing public key to sparkle_pubkey.txt…"
+echo "Writing public key to sparkle_pubkey.txt..."
 "$BIN/generate_keys" -p > sparkle_pubkey.txt
 
 echo
 echo "Done."
-echo "  • Public key (committed):   $(cat sparkle_pubkey.txt)"
-echo "  • Private key:              stored in your login Keychain only — DO NOT export or commit it."
+echo "  * Public key (committed):   $(cat sparkle_pubkey.txt)"
+echo "  * Private key:              stored in your login Keychain only -- DO NOT export or commit it."
 echo
 echo "Next: commit sparkle_pubkey.txt, then cut a release with ./release.sh."
 echo "Also set up your notarization credential once (see RELEASING.md):"

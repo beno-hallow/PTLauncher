@@ -172,9 +172,39 @@ final class ConfigStore {
         try? FileManager.default.createDirectory(at: scriptsURL, withIntermediateDirectories: true)
         if let data = try? Data(contentsOf: fileURL),
            let cfg = try? JSONDecoder().decode(Config.self, from: data) { return cfg }
-        let def = Config.makeDefault()
+        // First run on this machine: seed the bundled default scripts.
+        let def = seededDefault()
         save(def)
         return def
+    }
+
+    // First-run config. If the app bundle ships scripts in Resources/scripts
+    // (added by build.sh from the repo's default_scripts/ folder), copy each
+    // into the user's scripts folder and make a button for it. Otherwise fall
+    // back to the built-in default.
+    func seededDefault() -> Config {
+        guard let resDir = Bundle.main.resourceURL?.appendingPathComponent("scripts", isDirectory: true),
+              let items = try? FileManager.default.contentsOfDirectory(at: resDir, includingPropertiesForKeys: nil)
+        else { return Config.makeDefault() }
+
+        let scripts = items
+            .filter { $0.pathExtension == "applescript" }
+            .sorted { $0.lastPathComponent < $1.lastPathComponent }
+        guard !scripts.isEmpty else { return Config.makeDefault() }
+
+        var buttons: [LauncherButton] = []
+        for src in scripts {
+            let dst = scriptsURL.appendingPathComponent(src.lastPathComponent)
+            if !FileManager.default.fileExists(atPath: dst.path) {
+                try? FileManager.default.copyItem(at: src, to: dst)
+            }
+            let title = src.deletingPathExtension().lastPathComponent
+                .replacingOccurrences(of: "_", with: " ")
+            buttons.append(LauncherButton(title: title, type: .script,
+                                          scriptPath: dst.path, symbol: "waveform.path.ecg"))
+        }
+        return Config(columns: 3, buttonSize: 52, padding: 6,
+                      targetApp: "Pro Tools", followApp: "Pro Tools", buttons: buttons)
     }
 
     func save(_ cfg: Config) {
@@ -897,33 +927,70 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func writeScriptTemplate(to url: URL, buttonTitle: String) {
         let template = """
-        -- PT Launcher: \(buttonTitle)
-        -- Edit this script and save (⌘S). Changes take effect immediately next time you click the button.
-        -- Press ⌘K to compile and check for syntax errors.
+        -- PT Launcher button: \(buttonTitle)
         --
-        -- ── Examples ─────────────────────────────────────────────────────────────────
+        -- ==========================================================================
+        --  NOT SURE HOW TO WRITE THIS? Let Claude (or ChatGPT) do it for you.
+        --   1. Select all of this (Cmd-A), copy it (Cmd-C).
+        --   2. Paste it into Claude and finish this sentence:
+        --        "Make this PT Launcher button ______."
+        --      examples:
+        --        "run the iZotope RX De-hum plugin on the selected clip"
+        --        "bounce the session to disk"
+        --        "open my most recent Pro Tools session"
+        --   3. Claude gives you a finished script. Replace EVERYTHING in this file
+        --      with it, then Save (Cmd-S). Click the button to run it.
+        -- ==========================================================================
         --
-        -- Click a Pro Tools menu item:
-        --   tell application "Pro Tools" to activate
-        --   delay 0.2
-        --   tell application "System Events"
-        --       tell process "Pro Tools"
-        --           click menu item "RX 11 Connect" of menu "Noise Reduction" ¬
-        --               of menu item "Noise Reduction" of menu "AudioSuite" ¬
-        --               of menu bar item "AudioSuite" of menu bar 1
-        --       end tell
-        --   end tell
+        -- --------------------------------------------------------------------------
+        --  CONTEXT FOR CLAUDE  (read before writing the script)
+        -- --------------------------------------------------------------------------
+        --  * This file is an AppleScript that the macOS app "PT Launcher" runs when
+        --    the user clicks a button. Reply with a COMPLETE AppleScript and nothing
+        --    else. The user just wants it to work; assume they won't edit the code.
+        --  * Pro Tools has no real scripting API, so automate it the way a person
+        --    would: bring it to the front, then drive its menus with System Events
+        --    GUI scripting. PT Launcher already has Accessibility + Automation
+        --    permission, so GUI scripting is allowed.
+        --  * Target app name and process name are both "Pro Tools".
+        --  * Menu and button NAMES must match EXACTLY what the user sees on screen,
+        --    including version numbers (e.g. "RX 11 Connect", not "RX Connect").
+        --    AudioSuite plugins live under category submenus, e.g.
+        --    AudioSuite > Noise Reduction > <plugin name>. If you are not certain of
+        --    the exact wording, ask the user to read it off their own AudioSuite menu.
+        --  * Put a short "delay 0.2" after activating Pro Tools so its menus are ready.
+        --  * Keep it simple and add one comment line saying what it does.
         --
-        -- Click a button in an open plugin window:
-        --   tell application "System Events"
-        --       tell process "iZotope RX 11 Audio Editor"
-        --           click button "Send to iZotope RX" of window 1
-        --       end tell
-        --   end tell
+        --  THINGS YOU CAN DO (working examples):
         --
-        -- Run a shell command:
-        --   do shell script "open ~/Desktop/MySong.ptx"
-        -- ─────────────────────────────────────────────────────────────────────────────
+        --  -- Run an AudioSuite plugin on the selected clip:
+        --  tell application "Pro Tools" to activate
+        --  delay 0.2
+        --  tell application "System Events" to tell process "Pro Tools"
+        --      click menu item "RX 11 Connect" of menu "Noise Reduction" of menu item "Noise Reduction" of menu "AudioSuite" of menu bar item "AudioSuite" of menu bar 1
+        --  end tell
+        --
+        --  -- Send a Pro Tools key command (whatever the user has assigned):
+        --  tell application "Pro Tools" to activate
+        --  delay 0.1
+        --  tell application "System Events" to keystroke "b" using {command down}
+        --
+        --  -- Click a button inside an open plugin/dialog window:
+        --  tell application "System Events" to tell process "Pro Tools"
+        --      click button "Render" of window 1
+        --  end tell
+        --
+        --  -- Open another app or a file:
+        --  do shell script "open -a 'Logic Pro'"
+        --  do shell script "open ~/Desktop/MySession.ptx"
+        --
+        --  GOTCHAS:
+        --  * "Can't find menu item X" means the wording is wrong or the menu wasn't
+        --    open yet -- check exact spelling and add a small delay.
+        --  * Clicking the button shows any error in a popup, so it's safe to test.
+        -- --------------------------------------------------------------------------
+        --
+        -- Write the script below (and delete these comments once it works):
 
         """
         try? template.write(to: url, atomically: true, encoding: .utf8)
