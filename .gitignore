@@ -1,7 +1,18 @@
-# Build artifacts — everyone builds locally
+# Build artifacts
 PTLauncher
 PTLauncher.app/
+.build_dev/
+dist/
+*.zip
 
-# Signing scratch
+# macOS junk
+.DS_Store
+
+# Sparkle framework is downloaded per maintainer via ./setup-sparkle.sh
+Sparkle/
+
+# Signing scratch — NEVER commit private keys
 *.p12
 *.pem
+
+# NOTE: sparkle_pubkey.txt IS committed on purpose (it's the public key).

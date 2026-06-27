@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>PT Launcher</title>
+    <description>Updates for PT Launcher</description>
+    <language>en</language>
+    <!--
+      This file is regenerated automatically by ./release.sh — do not edit by hand.
+      Each release adds an <item> with the version, download URL, and Ed25519 signature.
+    -->
+  </channel>
+</rss>

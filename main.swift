@@ -1,4 +1,7 @@
 import Cocoa
+#if canImport(Sparkle)
+import Sparkle
+#endif
 
 // MARK: - Event tap callback (must be file-scope for use as C function pointer)
 
@@ -270,9 +273,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var hotkeyTap: CFMachPort?
     var hotkeyRunLoopSource: CFRunLoopSource?
 
+    // Sparkle auto-updater. startingUpdater:true begins scheduled background
+    // checks against the appcast (configured via the SU* keys in Info.plist).
+    // Compiled in only when the Sparkle framework is on the search path
+    // (build.sh / release.sh); dev.sh's plain Cocoa build skips it.
+    #if canImport(Sparkle)
+    var updaterController: SPUStandardUpdaterController!
+    #endif
+
     func applicationDidFinishLaunching(_ note: Notification) {
         config = ConfigStore.shared.load()
         migrateToScriptFiles()
+        #if canImport(Sparkle)
+        updaterController = SPUStandardUpdaterController(startingUpdater: true,
+                                                        updaterDelegate: nil,
+                                                        userDriverDelegate: nil)
+        #endif
         buildPanel()
         rebuildGrid()
         setupStatusItem()
@@ -703,10 +719,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         menu.addItem(.separator())
 
+        #if canImport(Sparkle)
+        let upd = NSMenuItem(title: "Check for Updates\u{2026}", action: #selector(checkForUpdates(_:)), keyEquivalent: "")
+        upd.target = self
+        menu.addItem(upd)
+
+        menu.addItem(.separator())
+        #endif
+
         let quit = NSMenuItem(title: "Quit PT Launcher", action: #selector(quit), keyEquivalent: "q")
         quit.target = self
         menu.addItem(quit)
     }
+
+    #if canImport(Sparkle)
+    @objc func checkForUpdates(_ sender: Any?) {
+        updaterController?.checkForUpdates(sender)
+    }
+    #endif
 
     @objc func addApplication() {
         let p = NSOpenPanel()
@@ -961,6 +991,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         guard !target.isEmpty, matches(NSWorkspace.shared.frontmostApplication, target: target) else {
             return Unmanaged.passRetained(event)
         }
+        guard !isFrontAppTextFieldFocused() else { return Unmanaged.passRetained(event) }
         let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
         // Number key keycodes (US layout): 1=18 2=19 3=20 4=21 5=23 6=22 7=26 8=28 9=25
         let map: [Int64: Int] = [18: 0, 19: 1, 20: 2, 21: 3, 23: 4, 22: 5, 26: 6, 28: 7, 25: 8]
@@ -970,6 +1001,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         let button = config.buttons[idx]
         DispatchQueue.main.async { self.run(button) }
         return nil  // consume — Pro Tools won't see this keypress
+    }
+
+    func isFrontAppTextFieldFocused() -> Bool {
+        guard let app = NSWorkspace.shared.frontmostApplication else { return false }
+        let axApp = AXUIElementCreateApplication(app.processIdentifier)
+        var focused: AnyObject?
+        guard AXUIElementCopyAttributeValue(axApp, kAXFocusedUIElementAttribute as CFString, &focused) == .success,
+              let element = focused else { return false }
+        var role: AnyObject?
+        AXUIElementCopyAttributeValue(element as! AXUIElement, kAXRoleAttribute as CFString, &role)
+        let r = role as? String ?? ""
+        return r == kAXTextFieldRole || r == kAXTextAreaRole || r == kAXComboBoxRole
     }
 
     // MARK: Drag reorder
